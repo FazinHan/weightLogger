@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weights!</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weights!</title>
 </head>
 <body>
-    <div>Your current weight
-        <form><input id="weight" type="text"> kg <p><input value="Submit" type="button" id="submit"></p></form></div>
-    <p></p>
-    <div>Your average weight (all-time) is <b id="alltime"></b> kg</div>
-    <div>Your one-week average is <b id="oneweek"></b> kg</div>
-    <script src="weight.js"></script>
+  <h1>Weight Logger</h1>
+  
+  <!-- Form to log weight -->
+  <form id="logWeightForm">
+    <label for="weight">Weight:</label>
+    <input type="number" id="weight" name="weight" required>
+    <button type="submit">Log Weight</button>
+  </form>
+
+  <!-- Display logged weights -->
+  <div id="weightLog"></div>
+
+  <script src="client.js"></script>
 </body>
 </html>
