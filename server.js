@@ -28,7 +28,7 @@ client.connect(err => {
     const weightData = req.body;
 
     // Assuming you have a collection named 'weights' in your database
-    const collection = client.db('your_database_name').collection('weights');
+    const collection = client.db('weightlogger').collection('weights');
 
     // Insert the weight data into the 'weights' collection
     collection.insertOne(weightData, (err, result) => {
