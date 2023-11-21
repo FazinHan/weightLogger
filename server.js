@@ -1,51 +1,49 @@
 // server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
 const app = express();
-const port = 3000;
+const port = 5500;
 
 app.use(bodyParser.json());
 
 // Use the environment variable for MongoDB URI
 // const mongoURI = process.env.MONGO_URI;
 const mongoURI = 'mongodb+srv://freakfizaan:Onwd3UmmicAiqn1R@cluster0.ji95cbm.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(mongoURI);
 
 // ... rest of the code remains unchanged
 
 // Connect to MongoDB
-client.connect(err => {
-  if (err) {
-    console.error('Error connecting to MongoDB:', err);
-    return;
-  }
-  console.log('Connected to MongoDB');
 
-  // Define your API endpoints here
-  app.post('/logWeight', (req, res) => {
-    const weightData = req.body;
+// Define your API endpoints here
+app.post('/logWeight', (req, res) => {
+  const weightData = req.body;
 
-    // Assuming you have a collection named 'weights' in your database
-    const collection = client.db('weightlogger').collection('weights');
+  // Assuming you have a collection named 'weights' in your database
+  const collection = client.db('weightlogger').collection('weights');
 
-    // Insert the weight data into the 'weights' collection
-    collection.insertOne(weightData, (err, result) => {
-      if (err) {
-        console.error('Error inserting weight data:', err);
-        res.status(500).send('Internal Server Error');
-        return;
-      }
-      console.log('Weight data inserted successfully');
-      res.status(200).send('Weight data logged successfully');
-    });
+  // Insert the weight data into the 'weights' collection
+  collection.insertOne(weightData, (err, result) => {
+    if (err) {
+      console.error('Error inserting weight data:', err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
+    console.log('Weight data inserted successfully');
+    res.status(200).send('Weight data logged successfully');
   });
+});
 
-  // Other API endpoints can be added here
+// app.get('/',(req, res)=>{
+// // console.log('online');
+// res.send('ready');
+// })
 
-  // Start the server
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-  });
+// Other API endpoints can be added here
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

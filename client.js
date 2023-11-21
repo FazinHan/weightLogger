@@ -6,7 +6,7 @@ const logWeight = async (weight) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ weight:weight, date:d.toString()}),
+        body: JSON.stringify({ weight:weight, date:d}),
       });
   
       if (response.ok) {
