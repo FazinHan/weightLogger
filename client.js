@@ -1,11 +1,12 @@
 const logWeight = async (weight) => {
+  const d = new Date();
     try {
       const response = await fetch('/logWeight', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ weight }),
+        body: JSON.stringify({ weight:weight, date:d.toString()}),
       });
   
       if (response.ok) {
