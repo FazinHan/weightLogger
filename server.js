@@ -3,13 +3,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5500;
 
 app.use(bodyParser.json());
 
 // MongoDB URI from environment variable
 const mongoURI = process.env.MONGO_URI;
+
+const client = new MongoClient(mongoURI);
 
 // Assume the MongoDB driver handles connection internally
 
@@ -17,7 +22,7 @@ const mongoURI = process.env.MONGO_URI;
 app.post('/logWeight', async (req, res) => {
   try {
     // Assuming 'weights' is the collection name
-    const collection = await mongoClient.db().collection('weights');
+    const collection = await client.db('weightlogger').collection('weights');
     const weightData = req.body;
     const result = await collection.insertOne(weightData);
 
@@ -33,7 +38,8 @@ app.post('/logWeight', async (req, res) => {
 app.get('/getWeight', async (req, res) => {
   try {
     // Assuming 'weights' is the collection name
-    const collection = await mongoClient.db().collection('weights');
+    console.log("MongoDB Server is Up:- "+client.getAddress())
+    const collection = await client.db('weightlogger').collection('weights');
     const weightData = await collection.find().toArray();
 
     console.log('Weight data retrieved successfully');
@@ -43,6 +49,11 @@ app.get('/getWeight', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+// app.get('/', async (req, res) => {
+//   res.status(200);
+//   res.body = 'ready';
+// })
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
