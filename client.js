@@ -38,13 +38,76 @@ const logWeight = async (weight) => {
   // Function to display weight data
   const displayWeightData = (weightData) => {
     const weightLogDiv = document.getElementById('weightLog');
-    weightLogDiv.innerHTML = '<h2>Weight Log</h2>';
+    weightLogDiv.innerHTML = '<h2>Weight Log</h2>';// Create a table element
+    const stats = document.createElement('div');
+    const table = document.createElement('table');
+    // table.border = '1';
+    let len = 0;
+    let daylen = 0;
+    // console.log(len-1)
   
-    weightData.forEach((entry) => {
-      const entryDiv = document.createElement('div');
-      entryDiv.textContent = `Weight: ${entry.weight}, Date: ${entry.date}`;
-      weightLogDiv.appendChild(entryDiv);
+    // Create table headers
+    const headers = ['Date', 'Time', 'Weight (in kg)'];
+    const headerRow = document.createElement('tr');
+    headers.forEach((headerText) => {
+      const headerCell = document.createElement('th');
+      headerCell.textContent = headerText;
+      headerRow.appendChild(headerCell);
     });
+    table.appendChild(headerRow);
+
+    let sum = 0;
+    let threeSum = 0;
+    let dateOld = '';
+    let threelen = 0;
+  
+    // Populate table with weight entries
+    weightData.slice().reverse().forEach((entry) => {
+      const entryRow = document.createElement('tr');
+  
+      // Extract date and time from ISO string
+      const isoDate = new Date(entry.date);
+      const date = isoDate.toLocaleDateString();
+      const time = isoDate.toLocaleTimeString();
+      // time = time.
+
+      if (dateOld !== date)
+      {
+        daylen += 1;
+      };
+      len += 1;
+
+      if(daylen <= 3)
+      {
+        threeSum += entry.weight;
+        threelen += 1;
+      };
+      sum += entry.weight;
+  
+      // Create table cells for date, time, and weight
+      const dateCell = document.createElement('td');
+      dateCell.textContent = date;
+      const timeCell = document.createElement('td');
+      timeCell.textContent = time;
+      const weightCell = document.createElement('td');
+      weightCell.textContent = entry.weight;
+  
+      // Append cells to the row
+      entryRow.appendChild(dateCell);
+      entryRow.appendChild(timeCell);
+      entryRow.appendChild(weightCell);
+  
+      // Append the row to the table
+      dateOld = date;
+      table.appendChild(entryRow);
+
+    });
+
+    stats.innerHTML = `Average Weight: ${Math.round((sum / len + Number.EPSILON)*100)/100}<br>Three day average: ${Math.round((threeSum / threelen + Number.EPSILON)*100)/100}<p></p>`;
+    // Append the table to the weightLogDiv
+    weightLogDiv.appendChild(stats);
+    weightLogDiv.appendChild(table);
+
   };
   
   // Event listener for the logWeightForm
