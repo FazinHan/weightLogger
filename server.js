@@ -4,46 +4,46 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-// Use the environment variable for MongoDB URI
-// const mongoURI = process.env.MONGO_URI;
-const mongoURI = 'mongodb+srv://freakfizaan:Onwd3UmmicAiqn1R@cluster0.ji95cbm.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(mongoURI);
+// MongoDB URI from environment variable
+const mongoURI = process.env.MONGO_URI;
 
-// ... rest of the code remains unchanged
+// Assume the MongoDB driver handles connection internally
 
-// Connect to MongoDB
+// Example endpoint to log weight
+app.post('/logWeight', async (req, res) => {
+  try {
+    // Assuming 'weights' is the collection name
+    const collection = await mongoClient.db().collection('weights');
+    const weightData = req.body;
+    const result = await collection.insertOne(weightData);
 
-// Define your API endpoints here
-app.post('/logWeight', (req, res) => {
-  const weightData = req.body;
-
-  // Assuming you have a collection named 'weights' in your database
-  const collection = client.db('weightlogger').collection('weights');
-
-  // Insert the weight data into the 'weights' collection
-  collection.insertOne(weightData, (err, result) => {
-    if (err) {
-      console.error('Error inserting weight data:', err);
-      res.status(500).send('Internal Server Error');
-      return;
-    }
     console.log('Weight data inserted successfully');
     res.status(200).send('Weight data logged successfully');
-  });
+  } catch (error) {
+    console.error('Error inserting weight data:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-// app.get('/',(req, res)=>{
-// // console.log('online');
-// res.send('ready');
-// })
+// Example endpoint to get weight data
+app.get('/getWeight', async (req, res) => {
+  try {
+    // Assuming 'weights' is the collection name
+    const collection = await mongoClient.db().collection('weights');
+    const weightData = await collection.find().toArray();
 
-// Other API endpoints can be added here
+    console.log('Weight data retrieved successfully');
+    res.status(200).json(weightData);
+  } catch (error) {
+    console.error('Error retrieving weight data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
