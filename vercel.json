@@ -1,12 +1,9 @@
 {
-    "functions": {
-      "api": {
-        "src": "server.js",
-        "routes": [
-          { "src": "/logWeight", "methods": ["POST"] },
-          { "src": "/getWeight", "methods": ["GET"] }
-        ]
-      }
-    }
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "src/server.js"
+        }
+    ]
   }
   
