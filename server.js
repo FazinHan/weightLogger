@@ -3,12 +3,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); // development only maybe
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5500;
 
+app.use(express.static('.'));
 app.use(bodyParser.json());
 
 // MongoDB URI from environment variable
@@ -38,7 +39,7 @@ app.post('/logWeight', async (req, res) => {
 app.get('/getWeight', async (req, res) => {
   try {
     // Assuming 'weights' is the collection name
-    console.log("MongoDB Server is Up:- "+client.getAddress())
+    // console.log("MongoDB Server is Up:- "+client.getAddress())
     const collection = await client.db('weightlogger').collection('weights');
     const weightData = await collection.find().toArray();
 
