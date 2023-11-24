@@ -1,3 +1,25 @@
+function toampm(date_string){// Assuming your date string is in UTC format
+  const utcDateString = date_string;
+
+  // Step 1: Parse the UTC date string
+  const utcDate = new Date(utcDateString);
+
+  // Step 2: Convert the date to the local time zone
+  // const localDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
+
+  // Step 3: Extract hours and minutes
+  const hours = utcDate.getHours();
+  const minutes = utcDate.getMinutes();
+
+  // Step 4: Format hours in 12-hour format
+  const formattedHours = hours % 12 || 12; // Use 12 when hours is 0
+
+  // Step 5: Display the formatted time
+  const formattedTime = `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
+
+  return formattedTime;
+};
+
 const logWeight = async (weight) => {
   const d = new Date();
     try {
@@ -68,7 +90,7 @@ const logWeight = async (weight) => {
       // Extract date and time from ISO string
       const isoDate = new Date(entry.date);
       const date = isoDate.toLocaleDateString();
-      const time = isoDate.toLocaleTimeString();
+      const time = toampm(isoDate);
       // time = time.
 
       if (dateOld !== date)
